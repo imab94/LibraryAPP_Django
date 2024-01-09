@@ -1,0 +1,106 @@
+{% extends 'base.html' %} 
+{% block title %}Author | {{ author_name }} 
+{% endblock title %} 
+{% block content %}
+<style>
+  #bookcardbody{
+    max-height: 250px;
+    height: 250px;
+  }
+
+.booktextcard{
+  margin-top:1rem;
+}
+
+#ratingCount{
+  text-align: center;
+  margin-left:0.2rem;
+  margin-top: -3px;
+}
+
+</style>
+    
+<div class="container my-3">
+  <div class="row">
+    <h1 class="border border-danger rounded bg-danger text-white text-center mb-4">{{author_name}} Books Collection</h1>
+    {% for book in get_books %}
+    <div class="col-md-3 mb-3">
+      <div class="card border rounded">
+        <div class="card-body" id="bookcardbody">
+          <h5 class="card-title" >{{ book.title }}</h5>
+          <p class="card-text booktextcard" style="font-weight:bold;">Genre : {{ book.genre }}</p>
+          <p class="card-text booktextcard text-secondary" >Price : ${{ book.price }}</p>
+          <div class="info-col">
+            <h6 class="heading mt-3">Rating:</h6>
+            <div class="rating d-flex align-items-center" id="book-rating" data-author-id="{{ book.author.id }}" data-book-id="{{book.id}}">
+              <i class="fa fa-star mr-1" data-star="1"></i>
+              <i class="fa fa-star mr-1" data-star="2"></i>
+              <i class="fa fa-star mr-1" data-star="3"></i>
+              <i class="fa fa-star mr-1" data-star="4"></i>
+              <i class="fa fa-star mr-1" data-star="5"></i>
+              <span class="rating-count" id="ratingCount">(0)</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mx-3 mb-3">
+          <a role="button" href="{% if user.is_authenticated %}{% url 'book_detail' book.id %}{% else %}{% url 'login_page' %}{% endif %}" class="btn btn-danger bg-success text-white book-titles" style="width: 48%; text-decoration:none !important;">
+            Read
+          </a>
+          <a role="button" href="{% if user.is_authenticated %}{% url 'rent_book' book.id %}{% else %}{% url 'login_page' %}{% endif %}" class="btn btn-info bg-info text-white book-titles" style="width: 48%;  text-decoration:none !important;">
+            Rent
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <a role="button" style="text-decoration:none !important;" href="{% url 'index' %}" class="btn btn-danger bg-success text-white book-titles">
+  Back  
+  </a>
+</div>
+
+<script>
+  $(document).ready(function() {
+    var bookId = document.getElementById('book-rating').getAttribute('data-author-id');
+    $.ajax({
+        type: 'GET',
+        url: '/all_ratings_for_book/' + bookId + '/',
+        headers: {
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function(response) {
+            var starColor = 'orange';
+            Object.keys(response.ratings_for_books).forEach(function(bookId) {
+              //console.log(bookId)
+                let avgRating = response.ratings_for_books[bookId];
+                //console.log(avgRating);
+                let bookRatingContainer = $('.rating[data-book-id="' + bookId + '"]');
+                console.log(bookRatingContainer);
+                if (bookRatingContainer) {
+                    let stars = bookRatingContainer.find('i');
+
+                    if (avgRating !== null) {
+                        for (let i = 0; i < avgRating; i++) {
+                            if (stars[i]) {
+                                stars[i].style.color = starColor;
+                            }
+                        }
+                    } else {
+                        avgRating = 0;
+                    }
+
+                    let decimalRating = parseFloat(avgRating).toFixed(1);
+                    bookRatingContainer.find('.rating-count').text('(' + decimalRating + ')');
+                }
+            });
+        },
+        error: function(error) {
+            // Handle error
+           // console.log(error);
+        }
+    });
+});
+
+</script>
+  
+{% endblock content %}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Library | Home {% endblock title %}
+
+{% block content %}
+
+<!-- Carousals items -->
+
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for item in carousals %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <img src="{{ item.image1.url }}" class="d-block w-100" alt="Image 1">
+        </div>
+        <div class="carousel-item">
+          <img src="{{ item.image2.url }}" class="d-block w-100" alt="Image 2">
+        </div>
+        <div class="carousel-item">
+          <img src="{{ item.image3.url }}" class="d-block w-100" alt="Image 3">
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+  
+
+<!-- Author Cards -->
+
+<div class="container my-3">
+    <h2 class="text-center border rounded mb-3 text-secondary">Authors</h2>
+    <div class="row" id="authorrow">
+        {% if error_message %}
+          <div class="alert alert-danger text-center">
+              {{ error_message }}
+          </div>
+        {% else %}
+          {% for author in authors_data %}
+              <div class="col-md-3 mb-4" id="authordiv">
+                  <div id ="authorcard" class="card border rounded">
+                      <img src="{{ author.author_pic.url }}" class="card-img-top" alt="{{ author.name }}'s Picture" style="width: 100%; height: 200px; object-fit: cover;">
+                          <div class="card-body">
+                            <h5 class="card-title">{{author.name}}</h5>
+                            <p class="card-text">{{ author.bio | truncatechars:50 }}</p>
+                            <a href="{% url 'get_author_books' author.id %}" class="btn btn-danger border border-danger rounded">
+                            <!-- <a href="{% if user.is_authenticated %}{% url 'get_author_books' author.id %}{% else %}{% url 'login_page' %}{% endif %}" class="btn btn-danger border border-danger rounded"> -->
+                            Books
+                            </a> 
+                            <div class="info-col">
+                              <h6 class="heading mt-2 mb-0">Rating:</h6>
+                              <div class="rating" id="book-rating" data-author-id="{{ author.id }}">
+                                  <i class="fa fa-star" data-star="1"></i>
+                                  <i class="fa fa-star" data-star="2"></i>
+                                  <i class="fa fa-star" data-star="3"></i>
+                                  <i class="fa fa-star" data-star="4"></i>
+                                  <i class="fa fa-star" data-star="5"></i>
+                                  <span class="rating-count">(0)</span>
+                                </div>
+                          </div>                                             
+                          </div>
+                  </div>
+              </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-end">
+          {% if authors_data.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?page=1" tabindex="-1">First</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ authors_data.previous_page_number }}">Previous</a>
+              </li>
+          {% endif %}
+          
+          {% for i in authors_data.paginator.page_range %}
+              <li class="page-item {% if i == authors_data.number %}active{% endif %}">
+                  <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+              </li>
+          {% endfor %}
+          
+          {% if authors_data.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ authors_data.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ authors_data.paginator.num_pages }}">Last</a>
+              </li>
+          {% endif %}
+      </ul>
+  </nav>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    $.ajax({
+        type: 'GET',
+        url: '/get_average_ratings/',
+        headers: {
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        success: function(response) {
+            var starColor = 'orange';
+
+            // Loop through the response data and update stars for each author
+            response.forEach(function(authorData) {
+                let authorId = authorData.author_id;
+                let avgRating = Math.round(authorData.avg_rating);
+                let total_users_rating = authorData.total_users_rating; 
+                // Find the rating container using data-author-id
+                let authorRatingContainer = document.querySelector('.rating[data-author-id="' + authorId + '"]');
+
+                if (authorRatingContainer) {
+                    let stars = authorRatingContainer.querySelectorAll('i');
+
+                    // Update stars based on avgRating
+                    for (let i = 0; i < avgRating; i++) {
+                        if (stars[i]) { // Check if the star element exists
+                            stars[i].style.color = starColor;
+                        }
+                    }
+
+                    for (var j = avgRating; j < stars.length; j++) {
+                        if (stars[j]) { // Check if the star element exists
+                            stars[j].style.color = '#e6e6e6';
+                        }
+                    }
+
+                    // Update the rating count
+                    authorRatingContainer.querySelector('.rating-count').textContent = '(' + total_users_rating + ')';
+                }
+            });
+        },
+        error: function(error) {
+           // console.log(error);
+        }
+    });
+});
+
+</script>
+
+
+  
+{% endblock content %}

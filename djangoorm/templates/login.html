@@ -1,0 +1,48 @@
+{% extends 'base.html' %} 
+{% block title %}Login Page{% endblock title %}
+{% block content %}
+<div class="container">
+  <div class="login-form">
+    <h2>Login</h2>
+    <!-- show the errro message if user is not registered -->
+    {% if error_message %}
+    <div class="text-danger mb-2 text-center" id="error_message">{{ error_message }}</div>
+      <script>
+          setTimeout(function() {
+              document.getElementById('error_message').style.display = 'none';
+          }, 5000);
+      </script>
+    {% endif %}
+
+    <form action="{% url 'user_login' %}" method="POST">
+      {% csrf_token %}
+      <input type="email" class="form-control" placeholder="Email Address" name="email" required />
+      <div class="password-container">
+        <input type="password" class="form-control" placeholder="Password" name="password" id="password-field" required />
+        <i class="fa fa-eye-slash toggle-password" id="toggle-password"></i>
+      </div>
+      <a href="{% url 'forgot_password' %}" class="text-danger mt-0 mb-2 mx-2 text-decoration-none">Forgot Password?</a>
+
+      <button type="submit" class="btn btn-danger mb-3">Login</button>
+    </form>
+    <a class="text-center text-danger mx-5 text-decoration-none Signuptag" href="{% url 'signup_page' %}">don't have an account?</a>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function(){
+      $("#toggle-password").click(function(){
+          var passwordField = $("#password-field");
+          var type = passwordField.attr("type");
+          if(type === "password"){
+              passwordField.attr("type", "text");
+              $("#toggle-password").removeClass("fa-eye-slash").addClass("fa-eye");
+          } else {
+              passwordField.attr("type", "password");
+              $("#toggle-password").removeClass("fa-eye").addClass("fa-eye-slash");
+          }
+      });
+  });
+</script>
+{% endblock content %}

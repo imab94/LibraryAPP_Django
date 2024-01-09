@@ -1,0 +1,175 @@
+.profile-form .user-profile-title{
+    align-items: center;
+    text-align: center;
+    margin-top:3px;
+    margin-bottom: 5px;
+    color:#2980b9;
+}
+
+.btn-danger{
+    background-color: #2980b9 !important;
+    border: #2980b9 !important;
+}
+
+.btn-outline-danger{
+    background-color: #2980b9 !important;
+    border: #2980b9 !important;
+    color: #fff !important;
+}
+
+.text-danger{
+    color: #2980b9 !important;
+}
+
+
+.profile-form {
+    max-width: 600px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.profile-form .center-container {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.profile-form .profile-pic-container {
+    width: 150px;
+    height: 150px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden;
+    box-shadow: 0px 0px 0px 5px rgba(130,133,142,0.5) !important;
+}
+
+.profile-pic img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-pic #profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-form .file-input-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#profile-pic1 {
+    display: none;
+}
+
+.file-input-container .file-label {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-input-container .file-label:hover {
+    background-color: #2980b9;
+}
+
+.profile-form label {
+    display: block;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.profile-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.profile-form button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.profile-form button:hover {
+    background-color: #2980b9;
+}
+
+.pagination .page-link {
+    color: #2980b9;
+    background-color: transparent;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #2980b9;
+    color: #fff; 
+}
+
+form .password-container {
+    position: relative;
+}
+
+form #password-field {
+    width: 100%;
+}
+
+form .password-container #toggle-password1 {
+    position: absolute;
+    right: 10px; /* Adjust the distance of the eye icon from the right side */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+form .password-container #toggle-password2 {
+    position: absolute;
+    right: 10px; /* Adjust the distance of the eye icon from the right side */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+form .password-container #toggle-password {
+    position: absolute;
+    right: 10px; /* Adjust the distance of the eye icon from the right side */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.info-col .fa-star {
+    color: #e6e6e6;
+    font-size: 20px;
+    outline: none;
+}
+
+.info-col .fa-star:hover {
+    color: rgb(235, 247, 12);
+    cursor: pointer;
+}
+
+.info-col .fa-star .yellow{
+    color: yellow;
+    background-color: yellow;
+}
+
+
+

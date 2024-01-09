@@ -1,0 +1,486 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+    }
+
+    #container {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        background-color:#fcf8f8;
+        box-shadow: 0 4px 8px rgba(242, 238, 238, 0.88);
+        border-radius: 10px;
+    }
+
+    .info-col {
+        flex-basis: 48%;
+    }
+
+    h4 {
+        color: #333;
+    }
+
+    p {
+        color: #555;
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background: #ddd;
+        margin: 20px 0;
+    }
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* 3D Book Animations */
+    
+    @import url("https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,600|Tulpen+One&display=swap");
+:root {
+  /* colors */
+  --body-bg: #FAFAFA;
+  --page-bg: #F5F5F5;
+  --dark-text: #2A2935;
+  /* spacing */
+  /* this is what defines the global scale */
+  --baseline: 12px;
+  /* fonts */
+  --book-title: "Tulpen One", sans-serif;
+  --title: "Cormorant Garamond", serif;
+  --body: "Cormorant Garamond", serif;
+  --base-size: var(--baseline) * 1.2;
+}
+
+
+body {
+  background-color: var(--body-bg);
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover {
+  width: calc(var(--baseline) * 60);
+  height: calc(var(--baseline) * 42.6);
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+}
+
+.book {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  perspective: 1200px;
+}
+.book__page {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: grid;
+  transform: rotateY(0deg);
+  transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transform-origin: 0% 0%;
+  background-color: var(--page-bg);
+  background-image: linear-gradient(90deg, #e3e3e3 0%, rgba(247, 247, 247, 0) 18%);
+}
+.book__page:nth-of-type(1) {
+  background-image: linear-gradient(-90deg, #e3e3e3 0%, rgba(247, 247, 247, 0) 18%);
+}
+.book__page--1 {
+  cursor: pointer;
+  overflow: hidden;
+}
+.book__page--1 img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.book__page--2 {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  background-color: var(--page-bg);
+  background-image: linear-gradient(90deg, #e3e3e3 0%, rgba(247, 247, 247, 0) 18%);
+}
+.book__page--4 {
+  cursor: pointer;
+  padding: 0 calc(var(--baseline) * 3);
+}
+.book__page-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotateY(0deg) translateZ(1px);
+}
+.book__page-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 0 calc(var(--baseline) * 1.8);
+  transform: rotateY(180deg) translateZ(1px);
+}
+.book__page .page__content {
+  padding: var(--baseline);
+  height: 100%;
+  position: relative;
+  text-align: center;
+}
+.book__page .page__content-book-title {
+  font-family: var(--book-title);
+  font-size: calc(var(--base-size) * 3);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--dark-text);
+  margin-top: calc(var(--baseline) * 5);
+  margin-bottom: calc(var(--baseline) * 2);
+}
+.book__page .page__content-author {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 1.2);
+  font-weight: 100;
+  text-transform: uppercase;
+  color: var(--dark-text);
+  border-top: 1px solid var(--dark-text);
+  border-bottom: 1px solid var(--dark-text);
+  display: inline-block;
+  padding: calc(var(--baseline) / 2) calc(var(--baseline) / 5);
+  margin-bottom: calc(var(--baseline) * 6);
+}
+.book__page .page__content-credits {
+  font-family: var(--title);
+  text-transform: uppercase;
+  font-size: calc(var(--base-size) * 0.8);
+  margin-bottom: calc(var(--baseline) * 2);
+  letter-spacing: 1px;
+}
+.book__page .page__content-credits span {
+  display: block;
+  font-size: calc(var(--base-size) * 1.2);
+  letter-spacing: 0;
+}
+.book__page .page__content-copyright {
+  position: absolute;
+  width: calc(100% - (var(--baseline) * 2));
+  bottom: calc(var(--baseline) * 2);
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 0.8);
+  text-transform: uppercase;
+}
+.book__page .page__content-title {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: calc(var(--baseline) * 5);
+  margin-bottom: calc(var(--baseline) * 3);
+}
+.book__page .page__content-table {
+  width: 100%;
+  margin-top: calc(var(--baseline) * 2);
+}
+.book__page .page__content-table td {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 1);
+  padding-bottom: calc(var(--baseline) * 1.5);
+  text-transform: uppercase;
+}
+.book__page .page__content-blockquote {
+  margin-bottom: calc(var(--baseline) * 2);
+}
+.book__page .page__content-blockquote-text {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 0.67);
+  font-style: italic;
+  text-align: justify;
+}
+.book__page .page__content-blockquote-reference {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 0.7);
+  margin-top: calc(var(--baseline) * 0.3);
+  float: right;
+  text-transform: uppercase;
+}
+.book__page .page__content-text {
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 0.67);
+  text-align: justify;
+  text-indent: var(--baseline);
+}
+.book__page .page__number {
+  position: absolute;
+  bottom: var(--baseline);
+  width: calc(100% - (var(--baseline) * 2));
+  font-family: var(--title);
+  font-size: calc(var(--base-size) * 0.67);
+  text-align: center;
+}
+.book input[type=radio] {
+  display: none;
+}
+.book input[type=radio]:checked + .book__page {
+  transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transform: rotateY(-180deg);
+}
+
+
+/* CSS styles */
+/* Add your existing styles here */
+
+.cover {
+    width: calc(var(--baseline) * 60);
+    height: calc(var(--baseline) * 42.6);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    position: relative;
+    perspective: 1200px;
+  }
+  
+  .book {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    perspective: 1200px;
+    position: relative; /* Ensures pages stay within book cover */
+  }
+  
+  
+  /* Styles to handle page flipping */
+  .book input[type=radio] {
+    display: none;
+  }
+  
+  .book input[type=radio]:checked + .book__page {
+    transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transform: rotateY(-180deg);
+  }
+  
+</style>
+
+<div id="container">
+    <h1 class="page-header text-center border mb-3 py-2 px-2" style="background-color: #f3f5fa !important; border-radius: 8px; box-shadow: 0 4px 8px rgba(247, 242, 242, 0.88);">{{ book.title }}</h1>
+    <div class="info-row text-center border mb-3 py-2">
+        <div class="info-col">
+            <h4>Author:</h4>
+            <p>{{ book.author.name }}</p>
+        </div>
+        <div class="info-col">
+            <h4>Bio:</h4>
+            <p>{{ book.author.bio }}</p>
+        </div>
+
+        <div class="info-col">
+            <h4>Genre:</h4>
+            <p>{{ book.genre }}</p>
+        </div>
+        <div class="info-col">
+            <h4>Published Year:</h4>
+            <p>{{ book.published_year }}</p>
+        </div>
+
+        <div class="info-col">
+            <h4>Price:</h4>
+            <p>${{ book.price }}</p>
+        </div>
+    </div>
+
+    <div class="info-col row" >
+        <div class="rating my-0 col md-6 mx-3" id="book-rating" data-book-id="{{ book.id }}" data-user-id="{{ request.user.id }}" data-user-rating="{{ user_rating }}">
+            <h5 class="text-secondary mt-4">Rating:</h5>
+            <i class="fa fa-star" data-star="1"></i>
+            <i class="fa fa-star" data-star="2"></i>
+            <i class="fa fa-star" data-star="3"></i>
+            <i class="fa fa-star" data-star="4"></i>
+            <i class="fa fa-star" data-star="5"></i>
+        </div>
+        <div class="col-md-6 mx-3">
+            <h5 class="text-secondary mt-4">Comments:</h5>
+            <div class="d-flex align-items-center">
+                <span id="comments-count" class="badge bg-secondary mr-2">{{total_comments}}</span>
+                <a role="button" href="{% url 'show_all_comments' book.id %}" class=" mx-2 text-danger text-decoration-none"><b>Reviews</b></a>
+            </div>
+            <div id="comments-container" class="mt-3" style="margin-left: 1.2rem;">
+                <!-- Display comments of the logged-in user for this book -->
+                {% if user_comments %}
+                    {% for comment in user_comments %}
+                        <div class="container">
+                            {% if comment.user == request.user %}
+                               <span style="color:red;font-size:16px;font-weight:bold;"> You:</span>
+                            {% else %}
+                                {{ comment.user }}:
+                            {% endif %}
+                            {{ comment.content }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No comments from you for this book yet.</p>
+                {% endif %}
+            </div>            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-danger mb-2 text-center" id="error_message">{{ message }}</div>
+                    <script>
+                        setTimeout(function() {
+                            document.getElementById('error_message').style.display = 'none';
+                        }, 5000);
+                    </script>
+                {% endfor %}
+            {% endif %}
+
+            <div class="mt-3">
+                <form action="{% url 'post_comments' book.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" id="comment-input" name="postcomment" class="form-control" placeholder="Write a comment" required>
+                    <button class="btn btn-danger btn-sm mt-2">Post Comment</button>
+                </form>
+            </div>
+        </div>
+        
+        
+    </div>
+    <hr>
+    <div class="container text-center mb-2 ">
+        <b>
+            <span class="current">
+                Page {{ current_page.number }} of {{ current_page.paginator.num_pages }}
+            </span>
+        </b>
+    </div>
+    <div class="page-content text-center border mb-3 px-3 py-3" style="box-shadow: 0 4px 8px rgba(193, 189, 189, 0.88);">
+        {% for word in current_page.object_list %}
+            <p>{{ word|join:" " }}</p>
+        {% endfor %}
+
+        <div class="pagination h-100 d-flex align-items-center justify-content-center mb-3 fs-6">
+            <span class="step-links">
+                {% if current_page.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ current_page.previous_page_number }}">previous</a>
+                {% endif %}
+    
+                {% if current_page.has_next %}
+                    <a href="?page={{ current_page.next_page_number }}">next</a>
+                    <a href="?page={{ current_page.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div> 
+
+
+    
+    <a href="{% url 'get_author_books' book.author.id %}" role ="button" class="btn btn-danger rounded border text-decoration-none">Back</a>
+</div>
+
+
+<!-- Rating saved for user -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var stars = document.querySelectorAll('.rating i');
+    
+        stars.forEach(function(star) {
+            star.addEventListener('click', function() {
+                var rating = parseInt(this.getAttribute('data-star'), 10);
+                var bookId = document.getElementById('book-rating').getAttribute('data-book-id');
+                var successDiv = document.createElement('div');  
+                var response = { success: true };
+    
+                if (response.success) {
+                    var starColor = 'orange'; 
+    
+                    for (var i = 1; i <= rating; i++) {
+                        stars[i - 1].style.color = starColor;
+                    }
+    
+                    for (var j = rating; j < stars.length; j++) {
+                        stars[j].style.color = 'black'; 
+                    }
+    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/save_rating/' + bookId + '/',
+                        data: {
+                            'rating': rating,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                            successDiv.textContent = 'Rating saved successfully!';
+                            successDiv.classList.add('text-success', 'text-center', 'p-3');
+                            document.getElementById('book-rating').appendChild(successDiv);
+                            setTimeout(function() {
+                                successDiv.remove();
+                            }, 5000);
+                            }
+                            else if(response.error){
+                            successDiv.textContent = "Can't Rate, book is not published yet."
+                            successDiv.classList.add('text-success', 'text-center', 'p-3');
+                            document.getElementById('book-rating').appendChild(successDiv);
+                            setTimeout(function() {
+                                successDiv.remove();
+                            }, 5000);
+                            }
+                        },
+                        error: function(error) {
+                            //console.log(error);
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+
+$(document).ready(function() {
+        var bookId = document.getElementById('book-rating').getAttribute('data-book-id');
+      
+        $.ajax({
+          type: 'GET',
+          url: '/get_rating/' + bookId + '/',
+          headers: {
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+          },
+          success: function(response) {
+            var starColor = 'orange';
+            var stars = document.querySelectorAll('.rating i');
+      
+            for (var i = 0; i < response.rating; i++) {
+              stars[i].style.color = starColor;
+            }
+      
+            for (var j = response.rating; j < stars.length; j++) {
+              stars[j].style.color = '#e6e6e6';
+            }
+          },
+          error: function(error) {
+           // console.log(error);
+          }
+        });
+});
+
+
+</script>
+{% endblock content %}
+

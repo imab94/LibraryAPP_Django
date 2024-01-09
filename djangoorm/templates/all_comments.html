@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}All Comments | {{book.title}}{% endblock title %}
+{% block content %}
+<style>
+
+    .flex{
+        justify-content: center;
+        align-items: center;
+    }
+    .section-title{
+        text-align: center;
+        margin: 20px;
+        padding: 5px;
+    }
+    .heading{
+        margin:0 auto;
+        justify-content: center;
+        align-items: center;
+    }
+    .comment img {
+        width: 30px;
+        height: auto;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .comment p {
+        margin: 0;
+    }
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.user-info .author-image {
+    width: 30px; 
+    height: auto;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-comments p {
+    margin: 5px 0;
+}
+
+.container{
+    box-shadow: 10px 10px 10px 10px rgba(180, 177, 177, 0.4);
+    border-radius: 10px;
+    display: block;
+}
+
+</style>
+
+<div class="container">
+    <h3 class="section-title">Comment Section for {{ book.title }}</h3>
+    {% for user, comments in user_comments_dict.items %}
+    <div class="comment" id="comment-{{ user.id }}">
+        <div class="user-info">
+            <img class="author-image" src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}" alt="{{ user.name }}'s Image">
+            <div class="rating" id="rating-{{ user.id }}" data-book-id="{{ book.id }}" data-user-id="{{ user.id }}" data-user-rating="{{ user_rating }}">
+                <i class="fa fa-star" data-star="1"></i>
+                <i class="fa fa-star" data-star="2"></i>
+                <i class="fa fa-star" data-star="3"></i>
+                <i class="fa fa-star" data-star="4"></i>
+                <i class="fa fa-star" data-star="5"></i>
+            </div>
+        </div>
+        <div class="user-comments">
+            <p><strong>
+                {% if user.is_authenticated %}
+                    {% if not user.name %}
+                        Anonymous
+                    {% else %}
+                        {{user.name}}
+                    {% endif %}
+                {% else %}
+                    {% if not user.name %}
+                        You
+                    {% else %}
+                        {{ user.name }}
+                    {% endif %}
+                {% endif %}
+            </strong></p>            
+            {% for comment in comments %}
+                <p>{{ comment.content }}</p>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+        <p>No users have commented on this book yet.</p>
+    {% endfor %}
+</div>
+    <a href="{% url 'book_detail' book.id %}" role="button" class="btn btn-danger my-3" style="cursor: pointer; margin-left:4rem;">Back</a>
+ 
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            type: 'GET',
+            url: '/display_ratings_comments/' + '{{book.id}}' + '/',
+            headers: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function(response) {
+                var starColor = 'orange';
+                response.users_with_ratings_for_book.forEach(function(userData) {
+                    let user_id = userData.user__id;
+                    let rating = userData.rating;
+                    
+                    let ratingElement = $('#rating-' + user_id);
+                    let stars = ratingElement.find('i.fa-star');
+                    
+                    stars.each(function(index) {
+                        if (index < rating) {
+                            $(this).css('color', starColor);
+                        } else {
+                            $(this).css('color', '#ccc');
+                        }
+                    });
+                });
+            },            
+            error: function(error) {
+
+            }
+        });
+    });
+    
+</script>
+{% endblock content %}

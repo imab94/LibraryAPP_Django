@@ -1,0 +1,170 @@
+{% extends 'base.html' %} 
+{% block title %}Rent Book|LibraryHouse {% endblock title %}
+{% block content %}
+<style>
+    body{
+        background-color: aliceblue;
+    }
+    .form-group{
+        margin-top: 20px;
+    }
+ 
+    .dropdown-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .arrow-down {
+        position: absolute;
+        top: 50%;
+        right: 10px; 
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    .arrow-down::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 5px 0 5px;
+        border-color: #000 transparent transparent transparent;
+        transform: translateY(-50%);
+    }
+    
+</style>
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8" id="maindiv">
+            <form action="{% url 'books_on_rent' book.id %}" method="POST" class="shadow p-4 border rounded">
+                {% csrf_token %}
+                <h2 class="text-center mb-4 text-danger">Rent Book</h2>
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-2 text-center" style="color:red;font-weight:500;" id="error_message">{{ message }}</div>
+                    <script>
+                        setTimeout(function() {
+                            document.getElementById('error_message').style.display = 'none';
+                        }, 8000);
+                    </script>
+                {% endfor %}
+            {% endif %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Book Details -->
+                        <div class="form-group">
+                            <label for="book-title">Book Title</label>
+                            <input type="text" class="form-control" id="book-title" value="{{ book.title }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="book-author">Author</label>
+                            <input type="text" class="form-control" id="book-author" value="{{ book.author }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- User Information -->
+                        <div class="form-group">
+                            <label for="user-name">Name</label>
+                            <input type="text" class="form-control" id="user-name" value="{{ user.name }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email">Email</label>
+                            <input type="email" class="form-control" id="user-email" value="{{ user.email }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="book-genre">Genre</label>
+                            <input type="text" class="form-control" id="book-genre" value="{{ book.genre }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="book-price">Original Price (in USD $)</label>
+                            <input type="text" class="form-control" id="book-price" value="{{ book.price }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Rent Duration and Token Amount -->
+                        <div class="form-group">
+                            <label for="rent-duration">Rent Duration (in days)</label>
+                            <div class="dropdown-select">
+                                <select class="form-control" id="rent-duration" name="rent-duration" required>
+                                    <option value="1">1 day</option>
+                                    <option value="3">3 days</option>
+                                    <option value="5">5 days</option>
+                                    <option value="7">7 days</option>
+                                    <option value="10">10 days</option>
+                                    <option value="15">15 days</option>
+                                    <option value="20">20 days</option>
+                                </select>
+                                <div class="arrow-down"></div>
+                            </div>
+                        </div>                                                 
+                        <div class="form-group">
+                            <label for="rented-token">Rented Token Amount</label>
+                            <input type="text" class="form-control" id="rented-token" name="rented-token" required readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6 text-left">
+                        <!-- Back button -->
+                        <a role="button" href="{% url 'get_author_books' book.author.id %}" class="btn btn-warning text-white">Back</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <!-- Rent Now button -->
+                        <button type="submit" class="btn btn-danger text-white" id="rentbtn">Rent Now</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#rent-duration').on('change', calculateRentedToken);
+    
+        function calculateRentedToken() {
+            const rentDuration = parseInt($('#rent-duration').val());
+            let rentedTokenAmount = 0;
+    
+            if (rentDuration === 1) {
+                rentedTokenAmount = 1.5;
+            }
+            else if(rentDuration ===3){
+                rentedTokenAmount = 2;
+            }
+            else if(rentDuration === 5){
+                rentedTokenAmount = 3;
+            }
+            else if(rentDuration === 7){
+                rentedTokenAmount = 5;
+            }
+            else if(rentDuration === 10){
+                rentedTokenAmount = 7
+            }
+            else if(rentDuration === 15){
+                rentedTokenAmount = 10;
+            }
+            else if (rentDuration === 20){
+                rentedTokenAmount = 13;
+            }
+    
+            $('#rented-token').val(rentedTokenAmount.toFixed(2));
+        }
+    
+        $('#rented-token').val("1.5");
+    
+        $('#rent-duration').trigger('change');
+    });
+    
+</script>
+
+{% endblock content %}

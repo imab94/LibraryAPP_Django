@@ -1,0 +1,799 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}Library | Home{% endblock title %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/library_icon.png' %}" type="image/x-icon">
+
+    <style>
+        .bookcount:hover{
+            cursor: pointer;
+            text-decoration: underline !important;
+        }
+        .book-titles:hover{
+            text-decoration: underline !important;
+            cursor:pointer;
+        }
+
+        .list-unstyled a:hover{
+          cursor: pointer;
+          text-decoration: underline !important;
+        }
+        #authorrow{
+          display: flex;
+        }
+        #authordiv{
+          margin: auto;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .login-form {
+          width: 350px;
+          margin: 60px auto;
+          padding: 20px;
+          background-color: rgb(255, 255, 255);
+          border-radius: 10px;
+          box-shadow: 0px 0px 10px rgba(44, 43, 43, 0.2);
+      }
+
+      .login-form h2 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      .login-form input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+      }
+    
+      .login-form button {
+          width: 100%;
+          padding: 10px;
+          margin-top: 5px;
+          background-color: #ed3110;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+
+      .login-form .Signuptag:hover{
+        text-decoration: underline !important;
+
+      }
+
+      #authorcard {
+        border: 1px solid transparent;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      
+      #authorcard:hover {
+        transform: translateY(-5px); 
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      #profileDropdownMenu{
+        right: 0 !important;
+        left: auto !important;
+      }
+      .dropdown-item:hover {
+        background-color: transparent !important;
+      }
+
+    .notification {
+      margin-bottom: 10px;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 1.5s ease-out, opacity 1.5s ease-out;
+
+    }
+
+    .notification.notification-hide {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+
+    .notification-bold {
+      font-weight: bold;
+    }
+
+    .notification-color {
+      color: #1e5994; 
+    }
+
+    .notification-date {
+      font-style: italic;
+      color: #808080; 
+    }
+
+    #notificationsBody{
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+      transition: opacity 0.2s ease-in-out; 
+
+    }
+
+    #retunrdatespan{
+      font-weight: bold;
+      color: red;
+    }
+
+    .text-red {
+      color: red;
+  }
+
+  .text-white{
+    color: rgb(243, 240, 240);
+  }
+  
+  .text-gray{
+    color:rgb(190, 187, 187);
+  }
+
+
+.book_title_custom{
+  color:#17a2b8;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.notifications-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.notification {
+  background-color: #fffcfb;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-bold {
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-color {
+  color: #007bff;
+}
+
+.notification-date {
+  color: #777;
+}
+
+.notification-message {
+  color: #333;
+}
+
+.notification-days-left {
+  font-weight: bold;
+  color: #ff6347;
+}
+
+#clearNotifications{
+  color:#fff;
+  background-color: rgb(232, 18, 18);
+
+}
+
+.modal-content{
+  max-width: 85%;
+}
+
+:root {
+  --primary: #000000;
+  --background: #232323;
+  --secondary-background: #F2F2F2;
+  --gray: #847F90;
+  --gray-hover: #171717;
+  --primary-hover: #555555;
+  --link-gray: #666666;
+  --link-gray-hover: #171717;
+  --gray: #E1E1E1;
+  --gray-border: #E6E6E6;
+  --white: #FCFCFC;
+  --navbar-height: 64px;
+}
+
+
+#navigation {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+  align-items: center;
+  min-height: 36px;
+}
+
+#navigation:hover .dropdown {
+  display: block;
+}
+
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: scale(0.99) translateY(-0.7em);
+      transform-origin: top;
+  }
+
+  to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+  }
+}
+
+.dropdown__wrapper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding-top: 60px;
+}
+
+.dropdown {
+  border-radius: 8px;
+  background-color: var(--white);
+  display: none;
+  padding: 8px;
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid var(--gray-border);
+  box-shadow:
+      0 50px 100px -20px rgba(0, 0, 0, .12),
+      0 30px 60px -30px rgba(0, 0, 0, .15);
+  z-index: 2;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.list-items-with-description {
+  list-style-type: none;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+}
+
+.list-items-with-description li {
+  display: flex;
+  padding: 8px;
+  gap: 16px;
+  width: 100%;
+}
+
+.list-items-with-description li:hover {
+  background-color: var(--secondary-background);
+  border-radius: 6px;
+}
+
+.list-items-with-description li svg {
+  stroke: var(--link-gray-hover);
+  stroke-width: 1px;
+  width: 24px;
+  height: 24px;
+}
+
+.item-title h3 {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--link-gray-hover);
+}
+
+.item-title p {
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--link-gray);
+}
+
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.action-buttons a {
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 4px 8px;
+  transition: all 0.2s ease-in-out;
+  line-height: 1.25rem;
+}
+
+.secondary {
+  background: none;
+  color: var(--link-gray-hover);
+  outline: none;
+  border: 1px solid var(--gray-border);
+  border-radius: 6px;
+}
+
+.secondary:hover {
+  background: var(--secondary-background);
+}
+
+.primary {
+  color: var(--white);
+  border-radius: 6px;
+  background-color: var(--primary);
+  padding: 8px 16px;
+}
+
+
+</style>
+</head>
+<body>
+
+  <!--  navbar links -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'index' %}">LibraryHouse</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link aboutMe" aria-current="page" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link OurServices" aria-current="page" href="#">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Contact</a>
+              </li>
+              {% if is_authenticated %}            
+                <li class="nav-item" id="navigation">
+                    <a class="nav-link" aria-current="page" href="#">
+                        Features
+                    </a>
+                    <div class="dropdown__wrapper">
+                        <div class="dropdown">
+                            <ul class="list-items-with-description">
+                                <li>
+                                  <i class="fa fa-signal" style="font-size:16px;"></i>  
+                                    <div class="item-title">
+                                        <h3>Status</h3>
+                                        <p>know your status</p>
+                                    </div>
+                                </li>
+                                <li>
+                                  <i class="fa fa-inbox" style="font-size:16px;"></i>  
+                                    <div class="item-title">
+                                        <h3>Inbox</h3>
+                                        <p>messages you've received</p>
+                                    </div>
+                                </li>
+                                <li>
+                                  <i class="fa fa-credit-card" style="font-size:16px;"></i>
+                                    <div class="item-title">
+                                        <h3>Payments</h3>
+                                        <p>payment methods</p>
+                                    </div>
+                                </li>
+                                <li>
+                                  <i class="fa fa-file" style="font-size:16px;"></i>
+                                    <div class="item-title">
+                                        <h3>History</h3>
+                                        <p>your account history</p>
+                                    </div>
+                                </li>
+                                <li>
+                                  <i class="fa fa-support" style="font-size:16px;"></i>
+                                    <div class="item-title">
+                                        <h3>Help & Support</h3>
+                                        <p>any issues?</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>           
+            {% endif %}
+            </ul>
+            <form class="d-flex" method="GET" action="{% url 'search_author' %}">
+              {% csrf_token %}
+              <input class="form-control me-2" type="search" name="searchauthor" placeholder="Search" aria-label="Search" required>
+              <button class="btn btn-outline-danger" type="submit">Search</button>
+            </form>          
+            <ul class="navbar-nav mx-2 messages">
+              {% if is_authenticated %}
+                    <li class="nav-item">
+                      <a id="notifications" class="notifications nav-link" href="#"><i class="fa fa-bell" aria-hidden="true"><sup class="fw-bolder">0</sup></i></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'user_profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                    </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'login_page' %}">Login</a>
+                </li>
+            {% endif %}
+            </ul>            
+          </div>
+        </div>
+  </nav>  
+    {% block content %}
+
+    {% endblock content %}
+
+<!-- footer starts -->
+  
+<footer class="bg-dark text-danger mt-3 ">
+  <div class="container" style="margin-top:200px;">
+    <div class="row justify-content-around mx-3">
+      <div class="col-md-4 col-sm-6 mt-3">
+        <h5>Company</h5>
+        <ul class="list-unstyled text-danger">
+          <li><a href="#" class="text-danger text-decoration-none aboutMe">About Us</a></li>
+          <li><a href="#" class="text-danger text-decoration-none">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-6 mt-3">
+        <h5>Services</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-danger text-decoration-none">Rent Book</a></li>
+          <li><a href="#" class="text-danger text-decoration-none">Read Book</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-6 mt-3">
+        <h5>Connect</h5>
+        <ul class="list-unstyled">
+          <li><a href="https://facebook.com/" target="_blank" class="text-danger text-decoration-none">Facebook</a></li>
+          <li><a href="https://twitter.com/" target="_blank" class="text-danger text-decoration-none">Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="trademark-company text-center pb-2">
+      <p class="text-center text-secondary">LibraryHouse.com&copy; 2023</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- About me Modal -->
+
+<div id="AboutMeModal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">About Us</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Welcome to <strong>LibraryHouse</strong>, where knowledge resides and dreams take flight! 
+         <i> We are a haven for book lovers, a sanctuary for seekers of wisdom, and a community that celebrates the power of literature.</i> 
+          At LibraryHouse, we believe in the magic of books, and our mission is to nurture this love of reading and learning. 
+          With a diverse collection of books, cozy reading nooks, and a dedicated team of bibliophiles, we are your gateway to a world of endless imagination.
+          Join us on this literary journey as we explore the realms of knowledge and creativity.
+          Whether you're a seasoned bibliophile or a novice bookworm, <strong>LibraryHouse</strong> is your home for all things literary.
+          <h4 class="text-center">Keep Learning &#128512; </h4>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Services Modal -->
+
+<div id="ServicesModal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Our Services</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-uppercase text-center">Service</th>
+              <th class="text-uppercase  text-center">Description</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr>
+              <td>Book Borrowing</td>
+              <td>Access our extensive collection of books for reading and research.</td>
+            </tr>
+            <tr>
+              <td>Research Assistance</td>
+              <td>Get help from our expert librarians for your research projects and inquiries.</td>
+            </tr>
+            <tr>
+              <td>Digital Resources</td>
+              <td>Access e-books, e-journals, and online databases for academic and personal use.</td>
+            </tr>
+            <tr>
+              <td>Events and Workshops</td>
+              <td>Participate in book clubs, workshops, and cultural events hosted by the library.</td>
+            </tr>
+            <tr>
+              <td>Quiet Reading Areas</td>
+              <td>Enjoy a peaceful reading environment with comfortable seating.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h4 class="text-center">Thanks for using our services &#128188;</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications modal -->
+
+<div class="modal" tabindex="-1" role="dialog" id="notificationsModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Notifications</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body notifications-container" id="notificationsBody">
+        <p>No notifications yet.</p>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" id="clearNotifications">Clear Notifications</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    $('.OurServices').click(function () {
+        $('#ServicesModal').modal('show');
+    });
+
+    $(".aboutMe").click(function () {
+        $('#AboutMeModal').modal('show');
+    });
+
+    $('#notifications').click(function () {
+        $('#notificationsModal').modal('show');
+    });
+
+  $(document).ready(function() {
+      function fetchNotificationsAndUpdateCount() {
+            const currentDate = new Date();
+            const currentHours = currentDate.getHours();
+            const currentMinutes = currentDate.getMinutes();
+            if (currentHours === 14 && currentMinutes === 32) {
+              $.ajax({
+                  url: '/get_notifications/',
+                  method: 'GET',
+                  success: function(response) {
+                    let user__id = response[0].user_id;
+                    let user_auth = '{{request.user.id}}';
+                    var formattedNotifications = "";
+                    var notificationsCount = response.length;
+                    if (notificationsCount === 0) {
+                        $('#notifications sup').text('0');
+                        $('#notificationsBody').html('<p class="text-center">No new notifications yet.</p>');
+                        localStorage.setItem('notifications', JSON.stringify([]));
+                    }
+                    else if(user__id == user_auth){
+                      for (let i = 0; i < response.length; i++) {
+                        let message = response[i].message;
+                        let split_text = message.split('Title:')
+                        let book_title = '';
+                        if(split_text.length > 1){
+                        book_title = split_text[1].split("is due soon")[0];
+                        }
+                        let original_message = message.split('by')[0];
+                        let dateFormatted = message.split('by')[1];                     
+                        let dateObject = new Date(dateFormatted);
+                        let formattedDate = dateObject.toLocaleDateString();
+                        let hours = dateObject.getHours();
+                        let period = hours >= 12 ? 'PM' : 'AM';
+                        hours = hours % 12 || 12;
+                        let minutes = dateObject.getMinutes();
+                        let seconds = dateObject.getSeconds();
+                        let formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ' + period;
+                        let dayLeft = response[i].day_left;
+                        if(dayLeft<=0){
+                          formattedNotifications += `<div class="notification notification-${i + 1}">
+                            <span class="notification-bold notification-color">Notification ${i + 1}:</span>
+                            <br>
+                            <span class="notification-date"><span id="retunrdatespan">Return Date Exceed: </span> - ${formattedDate} at ${formattedTime}</span>
+                            <br>
+                            <span>Your Return date has been Exceed for <span class='book_title_custom'>${book_title}</span>. you will be charged for this as per due date.</span>
+                            <br>
+                            
+                        </div>`;
+                        }
+                        else{
+                        formattedNotifications += `<div class="notification notification-${i + 1}">
+                            <span class="notification-bold notification-color">Notification ${i + 1}:</span>
+                            <br>
+                            <span class="notification-date"><span id="retunrdatespan">Upcoming Return Date</span> - ${formattedDate} at ${formattedTime}</span>
+                            <br>
+                            <span>${original_message}</span>
+                            <br>
+                            <span class="fw-bolder" style="color:red;">Days left: ${dayLeft} day before due date.</span>
+                            
+                        </div>`;
+                        }
+                        $('#notifications sup').text(notificationsCount).addClass('text-red');
+                        localStorage.setItem('notifications', JSON.stringify(response));
+
+                      }
+                    }
+                    $('#notificationsBody').html(formattedNotifications);
+                    $('#clearNotifications').click(function() {
+                      const notifications = $('#notificationsBody').find('.notification');
+                      const count = notifications.length;
+                  
+                      notifications.each(function(index) {
+                          $(this).delay(500 * index).addClass('notification-hide').delay(1500).queue(function(next) {
+                              $(this).remove();
+                              if (index === count - 1) {
+                                  $('#notificationsBody').html('<p class="text-center">No new notifications yet.</p>');
+                              }
+                              next();
+                          });
+                      });
+                  
+                      $('#notifications sup').text('0').addClass('text-gray');
+                      localStorage.setItem('notifications', JSON.stringify([]));
+                  });                  
+                                   
+                },                    
+                  error: function(error) {
+                      //console.log(error);  
+                      $('#notifications sup').text('0');
+                  }
+              });
+      }
+    }
+    // Function to render notifications on the page
+    function renderNotifications(notifications) {
+      var formattedNotifications = "";
+      var notificationsCount = notifications.length;
+      let user_auth = '{{request.user.id}}';
+      if (notificationsCount === 0) {
+          $('#notifications sup').text('0');
+          $('#notificationsBody').html('<p class="text-center">No new notifications yet.</p>');
+      }
+      else{
+        let user__id = notifications[0].user_id;
+          if(user__id == user_auth){
+            for (let i = 0; i < notifications.length; i++) {
+              let message = notifications[i].message;
+              let split_text = message.split('Title:')
+              let book_title = '';
+              if(split_text.length > 1){
+              book_title = split_text[1].split("is due soon")[0];
+              }
+              let original_message = message.split('by')[0];
+              let dateFormatted = message.split('by')[1];                     
+              let dateObject = new Date(dateFormatted);
+              let formattedDate = dateObject.toLocaleDateString();
+              let hours = dateObject.getHours();
+              let period = hours >= 12 ? 'PM' : 'AM';
+              hours = hours % 12 || 12;
+              let minutes = dateObject.getMinutes();
+              let seconds = dateObject.getSeconds();
+              let formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + ' ' + period;
+              let dayLeft = notifications[i].day_left;
+              if(dayLeft<=0){
+                formattedNotifications += `<div class="notification notification-${i + 1}">
+                  <span class="notification-bold notification-color">Notification ${i + 1}:</span>
+                  <br>
+                  <span class="notification-date"><span id="retunrdatespan">Return Date Exceed: </span> - ${formattedDate} at ${formattedTime}</span>
+                  <br>
+                  <span>Your Return date has been Exceed for <span class='book_title_custom'>${book_title}</span>. you will be charged for this as per due date.</span>
+                  <br>
+                  </div>`;
+              }
+              else{
+              formattedNotifications += `<div class="notification notification-${i + 1}">
+                  <span class="notification-bold notification-color">Notification ${i + 1}:</span>
+                  <br>
+                  <span class="notification-date"><span id="retunrdatespan">Upcoming Return Date</span> - ${formattedDate} at ${formattedTime}</span>
+                  <br>
+                  <span>${original_message}</span>
+                  <br>
+                  <span class="fw-bolder" style="color:red;">Days left: ${dayLeft} day before due date.</span>
+                </div>`;
+              }
+              $('#notifications sup').text(notificationsCount).addClass('text-red');
+
+            }
+          }
+        }
+      $('#notificationsBody').html(formattedNotifications);
+  }
+      // Retrieve saved notifications from localStorage on page load
+      const savedNotifications = JSON.parse(localStorage.getItem('notifications'));
+
+      if (savedNotifications && savedNotifications.length > 0) {
+          renderNotifications(savedNotifications);
+      } else {
+          // If no notifications are saved, display a message
+          renderNotifications([]);
+          $('#notificationsBody').html('<p class="text-center">No new notifications yet.</p>');
+
+      }
+
+      $('#clearNotifications').click(function() {
+        const notifications = $('#notificationsBody').find('.notification');
+        const count = notifications.length;
+    
+        notifications.each(function(index) {
+            $(this).delay(500 * index).addClass('notification-hide').delay(2000).queue(function(next) {
+                $(this).remove();
+                if (index === count - 1) {
+                    $('#notificationsBody').html('<p class="text-center">No new notifications yet.</p>');
+                }
+                next();
+            });
+        });
+    
+        $('#notifications sup').text('0').addClass('text-gray');
+        localStorage.setItem('notifications', JSON.stringify([]));
+    });
+    
+        setInterval(fetchNotificationsAndUpdateCount, 60000);
+});
+
+// Function to remove notifications with animation
+function removeNotification(notification) {
+  notification.classList.add('notification-fade-out');
+  
+  // Remove the notification after the animation ends
+  notification.addEventListener('animationend', () => {
+      notification.remove();
+  });
+
+  // Get the next notification after a delay and remove it
+  const nextNotification = notification.nextElementSibling;
+  if (nextNotification) {
+      setTimeout(() => {
+          removeNotification(nextNotification);
+      }, 2000); // Change this delay as needed (milliseconds)
+  }
+}
+
+
+</script>
+</body>
+</html>

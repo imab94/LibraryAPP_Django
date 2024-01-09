@@ -1,0 +1,219 @@
+<!-- 
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container my-2 mx-5">
+      <h1 class="text-center my-3 border border-secondary rounded bg-info text-danger">Library Data</h1>
+      <table class="table table-dark table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Author</th>
+                <th class="text-center" scope="col">Book</th>
+                <th class="text-center" scope="col">Reader</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for author_data in data %}
+          <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td class="text-center">{{ author_data.author.name }}<br><br>
+                <a href="#" data-bs-toggle="modal" class="bookcount text-danger text-center my-5 text-decoration-none" data-bs-target="#BookCountModal" data-author-id="{{ author_data.author.id }}">Get Info</a>
+              </td>
+              <td>
+                        {% for book in author_data.books %}
+                        <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-white text-center m-0 book-titles">
+                          <p class="m-0">{{ book.title }}</p>
+                        </a>
+                        {% endfor %}
+              </td>
+              <td>
+                  {% for reader in author_data.readers %}
+                    {{ reader.name }}<br>
+                  {% endfor %}
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+
+    </div>
+
+    <!-- Total Books Count modal -->
+
+    <!-- <div id ='BookCountModal' class="modal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Book Count</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <h3 class="text-center text-danger h2">Author Name: </h3>
+              <p class="text-center h5">{{author_name}}</p>
+              <h3 class="text-center text-danger h2">Bio: </h3>
+              <p class="text-center h5">{{bio}}</p>
+              <h3 class="text-center text-danger h2">Total Books Count: </h3>
+              <p class="text-center h5">{{get_books}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        $(document).ready(function () {
+          // Attach a click event handler to the "Total Books" link
+          $(".bookcount").click(function () {
+            var authorId = $(this).data("author-id");
+            console.log(authorId);
+            // Make an AJAX request to fetch the total books for the author
+            $.ajax({
+              type: "GET",
+              url: `/get_author_books/${authorId}/`, 
+              dataType: "json",
+              success: function (data) {
+                // Update the modal content with the retrieved data
+                $("#BookCountModal h3:contains('Author Name')").next("p").text(data.author_name);
+                $("#BookCountModal h3:contains('Bio')").next("p").text(data.bio);
+                $("#BookCountModal h3:contains('Total Books Count')").next("p").text(data.get_books);
+              },
+              error: function () {
+                $("#BookCountModal h3:contains('Author Name')").next("p").text("Failed to fetch data.");
+                $("#BookCountModal h3:contains('total Books Count')").next("p").text("Failed to fetch data.");
+              },
+            });
+          });
+        });
+      </script>
+    
+{% endblock content %}
+     
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Details{% endblock title %}
+{% block content %}
+
+  <div class="container my-3 mb-5 text-center" id="pdf-container">
+            <h1 class="border border-danger rounded bg-danger text-white">Book Information</h1>
+        <div class="content my-3 border border-secondary rounded bg-info ">
+            <h3>
+                {{ book.title }}
+            </h3>
+                <h2>Author:</h2> {{ book.author.name }}
+                <h2>Bio:</h2> {{ book.author.bio }}
+                <h2>Genre: </h2>{{ book.genre }}
+                <h2>Published Year: </h2>{{ book.published_year }}
+                <h2>Price: </h2>${{ book.price }}
+
+                <h2>Readers:</h2>
+                <ul>
+                    {% if book.readers.all %}
+                        {% for reader in book.readers.all %}
+                            <li>{{ reader.name }}</li>
+                        {% endfor %}
+                    {% else %}
+                        No Readers Available
+                    {% endif %}
+                </ul>
+            <a href="{% url 'get_author_books' book.author.id %}" role="button" class="btn btn-primary my-3 mx-5">Back</a>
+            <a role="button" id="pdf-button" class="btn btn-danger my-3 mx-5">Print</a>
+
+        </div>
+    </div>
+      
+    <script>
+        document.getElementById("pdf-button").addEventListener("click", function () {
+          const pdfContainer = document.getElementById("pdf-container");
+          const authorName = "{{ book.author.name }}";
+          const bookTitle = "{{ book.title }}";
+          console.log(new Date().toISOString());
+          const currentDate = new Date().toISOString().slice(0, 10).replace(/:/g, "-");
+      
+        html2pdf()
+        .from(pdfContainer)
+        .save(`${authorName}_${bookTitle}_${currentDate}.pdf`);
+        });
+    </script>
+            
+{% endblock content %}
+
+
+data of authors_book.html
+
+<!-- <div class="container my-2 mx-5">
+      <h1 class="text-center my-3 border border-secondary rounded bg-info text-danger">Author Books</h1>
+      <table class="table table-dark table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Author</th>
+                <th class="text-center" scope="col">Book</th>
+                <th class="text-center" scope="col">Reader</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <th scope="row">1</th>
+              <td class="text-center">{{ author_name }}<br><br>
+              </td>
+              <td>
+                        {% for book in get_books %}
+                        <a href="{% if user.is_authenticated %}{% url 'book_detail' book.id %}{% else %}{% url 'login_page' %}{% endif %}" class="text-decoration-none text-white text-center m-0 book-titles">
+                          <p class="m-0">{{ book.title }}</p>
+                        </a>
+                        {% endfor %}
+              </td>
+              <td>
+                {% if readers == '' %}
+                  `{% for reader in readers %}
+                    {{ reader.name }}<br>
+                    {% endfor %}
+                {% else %}
+                        <p class="m-0 text-center">No Readers found</p>
+                {% endif %}
+              </td>
+          </tr>
+      </tbody>
+    </table>
+    <a href="{% url 'index' %}" role="button" class="btn btn-success my-3 mx-5">Back</a>
+
+    </div> -->
+
+    <!-- 
+       this is our navbar logout and user profile..
+      
+      <ul class="navbar-nav mx-2 messages">
+      {% if is_authenticated %}
+        <li class="nav-item dropdown">
+          <a id="profiledisplay" class="nav-link text-danger" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user fs-5 mx-0 text-center"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-left bg-dark" id="profileDropdownMenu">
+            <li><a class="dropdown-item text-danger fw-bolder" href="{% url 'user_profile' %}">User Profile</a></li>
+            <li><a class="dropdown-item text-danger fw-bolder" href="{% url 'user_logout' %}">Logout</a></li>
+          </ul>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'login_page' %}">Login</a>
+        </li>
+    {% endif %}
+    </ul>  
+  
+# @login_required
+# def get_notifications(request):
+#     if request.user.is_authenticated:
+#         user_notifications = Notification.objects.filter(user=request.user)
+#         notifications_data = [notification.message for notification in user_notifications]
+#         return JsonResponse(notifications_data, safe=False)
+#     else:
+#         return JsonResponse([], safe=False) 
+  -->

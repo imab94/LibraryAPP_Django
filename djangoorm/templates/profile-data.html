@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'user_profile.html'%} 
+
+<form action="{% url 'update_profile' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="profile-form">
+        {% if error_message %}
+        <div id="error_message" class="alert alert-danger text-center">{{error_message}}</div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('error_message').style.display = 'none';
+            }, 5000);
+        </script>
+    {% endif %}
+
+    {% if success_message %}
+        <div id="success_message" class="alert alert-success text-center">{{success_message}}</div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('success_message').style.display = 'none';
+            }, 5000);
+        </script>
+    {% endif %}
+
+        <h1 class="user-profile-title">User Profile</h1>
+        <div class="center-container">
+            <div class="profile-pic-container">
+                <div class="profile-pic">
+                    <img id="profile-image" src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}" alt="Profile Picture" />
+                </div>
+            </div>
+        </div>
+        <div class="file-input-container">
+            <input type="file" id="profile-pic1" name="profile-pic">
+            <label for="profile-pic1" class="file-label">Choose a Profile Picture</label>
+        </div>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required value="{{ user.name }}">
+
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required value="{{ user.age }}">
+
+        <label for="contact">Contact:</label>
+        <input type="text" id="contact" name="contact" required value="{{ user.mobile_number }}">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required value="{{ user.email }}">
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" value="{{ user.country }}">
+        
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" value="{{ user.city }}">
+
+        <a href="{% url 'user_profile' %}" role ="button" class="rounded border text-decoration-none" style="background-color:red;color:#fff;padding:10px 20px;">Back</a>
+        <button type="submit">Update Profile</button>
+
+    </div>
+</form>
+
+{% endblock content %}

@@ -1,0 +1,93 @@
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <style></style>
+</head>
+<body>
+
+  <nav class="mynav">
+    <div class="sidebar-top">
+      <span class="expand-btn">
+        <i class="fa fa-angle-left"></i>      
+       </span>
+      <img
+        src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}"
+        class="logo"
+        alt="Laplace Logo"
+      >
+      <h3 class="hide">{{user.name}}</h3>
+    </div>
+    <div class="sidebar-links">
+      <ul>
+        <li>
+          <a href="{% url 'user_profile' %}" id="ProfileItem" class="active" title="Portfolio link">
+            <div class="icon">
+                <i class="fa fa-user-circle-o" style="font-size:25px"></i>
+            </div>
+            <span class="link hide">Profile</span>
+          </a>
+        </li>
+        
+        <li>
+          <a id="bookStatus" href="{% url 'get_book_status' %}" title="Analytics link">
+            <div class="icon">
+                <i class="fa fa-signal" style="font-size:25px"></i>            
+            </div>
+            <span class="link hide">Status</span>
+          </a>
+        </li>
+        <li>
+          <a href="#Inbox" title="Performance link">
+            <div class="icon">
+                <i class="fa fa-inbox" style="font-size:25px"></i>            
+            </div>
+            <span class="link hide">Inbox</span>
+          </a>
+        </li>
+        <li>
+            <a href="#Payments" title="Reports Link">
+              <div class="icon">
+                  <i class="fa fa-credit-card" style="font-size:25px"></i>
+              </div>
+              <span class="link hide">Payments</span>
+            </a>
+        </li>
+        <li>
+        <a href="#History" title="Reports Link">
+            <div class="icon">
+                <i class="fa fa-file" style="font-size:25px"></i>            
+            </div>
+            <span class="link hide">History</span>
+        </a>
+        </li>
+        <li>
+          <a href="#Help" title="Reports Link">
+            <div class="icon">
+                <i class="fa fa-support" style="font-size:25px;"></i>
+            </div>
+            <span class="link hide">Help or Support</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+</nav>
+
+
+<script>    
+  const expand_btn = document.querySelector(".expand-btn");
+  
+  let activeIndex;
+  
+  expand_btn.addEventListener("click", () => {
+    document.body.classList.toggle("collapsed");
+  });
+  
+  
+  </script> 
+</body>
+</html> -->
